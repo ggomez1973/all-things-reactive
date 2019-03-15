@@ -34,11 +34,10 @@ public class RouteConfig {
 
     private Mono<ServerResponse> byId(ServerRequest req) {
         Mono<Coffee> coffee = service.getCoffeeById(req.pathVariable("id"));
-        coffee.defaultIfEmpty(null);
         Mono<ServerResponse> sr = notFound().build();
         return ServerResponse.ok()
                 .body(coffee, Coffee.class)
-                .switchIfEmpty(sr); // Esto no funciona!
+                .switchIfEmpty(sr); // Esto no funciona?
     }
 
     private Mono<ServerResponse> orders(ServerRequest req) {
