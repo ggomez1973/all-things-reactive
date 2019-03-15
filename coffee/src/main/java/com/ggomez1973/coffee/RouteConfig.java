@@ -10,6 +10,7 @@ import reactor.core.publisher.Mono;
 
 import static org.springframework.web.reactive.function.server.RequestPredicates.GET;
 import static org.springframework.web.reactive.function.server.RouterFunctions.route;
+import static org.springframework.web.reactive.function.server.ServerResponse.notFound;
 
 @Configuration
 public class RouteConfig {
@@ -32,8 +33,12 @@ public class RouteConfig {
     }
 
     private Mono<ServerResponse> byId(ServerRequest req) {
+        Mono<Coffee> coffee = service.getCoffeeById(req.pathVariable("id"));
+        coffee.defaultIfEmpty(null);
+        Mono<ServerResponse> sr = notFound().build();
         return ServerResponse.ok()
-                .body(service.getCoffeeById(req.pathVariable("id")), Coffee.class);
+                .body(coffee, Coffee.class)
+                .switchIfEmpty(sr); // Esto no funciona!
     }
 
     private Mono<ServerResponse> orders(ServerRequest req) {
