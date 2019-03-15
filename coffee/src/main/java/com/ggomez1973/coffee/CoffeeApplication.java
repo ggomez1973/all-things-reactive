@@ -12,6 +12,7 @@ import reactor.core.publisher.Mono;
 import javax.annotation.PostConstruct;
 import java.time.Duration;
 import java.time.Instant;
+import java.util.Objects;
 import java.util.UUID;
 
 @SpringBootApplication
@@ -143,13 +144,12 @@ class Coffee {
 		if (this == o) return true;
 		if (o == null || getClass() != o.getClass()) return false;
 		Coffee coffee = (Coffee) o;
-		return com.google.common.base.Objects.equal(id, coffee.id) &&
-				com.google.common.base.Objects.equal(name, coffee.name);
+		return Objects.equals(id, coffee.id) && Objects.equals(name, coffee.name);
 	}
 
 	@Override
 	public int hashCode() {
-		return com.google.common.base.Objects.hashCode(id, name);
+		return Objects.hash(id, name);
 	}
 }
 
