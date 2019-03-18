@@ -19,6 +19,9 @@ class Coffee {
         this.name = name;
     }
 
+    public Coffee() {
+    }
+
     public static Coffee createCoffee(final String id, final String name) {
         return new Coffee(id, name);
     }

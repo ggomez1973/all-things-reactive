@@ -8,8 +8,7 @@ import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
-//@RestController
-//@RequestMapping("/coffees")
+@RestController
 class CoffeeController {
 	private final CoffeeService service;
 
@@ -17,17 +16,17 @@ class CoffeeController {
 		this.service = service;
 	}
 
-	@GetMapping
+	@GetMapping("/coffees")
 	public Flux<Coffee> all(){
 		return service.getCoffees();
 	}
 
-	@GetMapping("/{id}")
+	@GetMapping("/coffees/{id}")
 	public Mono<Coffee> byId(@PathVariable String id){
 		return service.getCoffeeById(id);
 	}
 
-	@GetMapping(value = "/{id}/orders", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
+	@GetMapping(value = "/coffees/{id}/orders", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
 	public Flux<CoffeeOrder> orders(@PathVariable String id){
 		return service.getOrders(id);
 	}

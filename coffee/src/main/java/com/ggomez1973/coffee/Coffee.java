@@ -17,6 +17,9 @@ class Coffee {
         return name;
     }
 
+    public Coffee() {
+    }
+
     private Coffee(final String id, final String name) {
         this.id = id;
         this.name = name;

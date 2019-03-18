@@ -12,8 +12,9 @@ import static org.springframework.web.reactive.function.server.RequestPredicates
 import static org.springframework.web.reactive.function.server.RouterFunctions.route;
 import static org.springframework.web.reactive.function.server.ServerResponse.notFound;
 
-@Configuration
+//@Configuration
 public class RouteConfig {
+
     private final CoffeeService service;
 
     public RouteConfig(CoffeeService service) {

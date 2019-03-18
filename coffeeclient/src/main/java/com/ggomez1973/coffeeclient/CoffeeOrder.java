@@ -14,6 +14,9 @@ class CoffeeOrder {
         return dateOrdered;
     }
 
+    public CoffeeOrder() {
+    }
+
     private CoffeeOrder(String coffeeId, Instant dateOrdered) {
         this.coffeeId = coffeeId;
         this.dateOrdered = dateOrdered;
