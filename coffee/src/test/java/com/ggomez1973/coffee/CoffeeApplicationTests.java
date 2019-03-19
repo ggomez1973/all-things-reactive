@@ -29,7 +29,6 @@ public class CoffeeApplicationTests {
 	@Test
 	public void shouldReturnEmptyIfNotFound(){
 		StepVerifier.withVirtualTime(() -> service.getCoffeeById("wrong id"))
-				.thenAwait(Duration.ofHours(4))
 				.expectNextCount(0)
 				.verifyComplete();
 	}

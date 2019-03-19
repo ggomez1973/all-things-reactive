@@ -1,5 +1,6 @@
 package com.ggomez1973.coffee;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -23,7 +24,9 @@ class CoffeeController {
 
 	@GetMapping("/coffees/{id}")
 	public Mono<Coffee> byId(@PathVariable String id){
-		return service.getCoffeeById(id);
+
+		return service.getCoffeeById(id)
+				.switchIfEmpty(Mono.error(new NoSuchCoffeeException(HttpStatus.BAD_REQUEST,String.format("No such coffee with id: %s", id))));
 	}
 
 	@GetMapping(value = "/coffees/{id}/orders", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
