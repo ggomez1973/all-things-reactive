@@ -33,6 +33,8 @@ public class InternalApiTest {
         Mockito.when(repo.findAll()).thenReturn(Flux.just(coffee1, coffee2));
         Mockito.when(repo.findById(coffee1.getId())).thenReturn(Mono.just(coffee1));
         Mockito.when(repo.findById(coffee2.getId())).thenReturn(Mono.just(coffee2));
+
+        Mockito.when(repo.findById("wrong_id")).thenReturn(Mono.empty());
     }
 
     @Test
@@ -48,6 +50,14 @@ public class InternalApiTest {
         StepVerifier.withVirtualTime(() -> service.getCoffeeById(coffee1.getId()))
                 .expectNext(coffee1)
                 .verifyComplete();
+    }
+
+    @Test
+    public void getCoffeeByWrongId() {
+        // No hago expectNext porque NO HAY NEXT. Retorna un Mono<Void> y da por completo el llamado.
+        StepVerifier.withVirtualTime(() -> service.getCoffeeById("wrong_id"))
+                .expectNextCount(0)
+                .expectComplete();
     }
 
     @Test

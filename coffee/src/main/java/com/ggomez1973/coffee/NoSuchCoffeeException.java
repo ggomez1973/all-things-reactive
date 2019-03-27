@@ -5,7 +5,6 @@ import org.springframework.web.server.ResponseStatusException;
 
 public class NoSuchCoffeeException extends ResponseStatusException {
 
-
     public NoSuchCoffeeException(HttpStatus status, String reason) {
         super(status, reason);
     }

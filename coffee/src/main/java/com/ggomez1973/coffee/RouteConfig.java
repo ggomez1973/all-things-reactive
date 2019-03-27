@@ -1,5 +1,7 @@
 package com.ggomez1973.coffee;
 
+//import org.slf4j.Logger;
+//import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.MediaType;
@@ -7,13 +9,18 @@ import org.springframework.web.reactive.function.server.RouterFunction;
 import org.springframework.web.reactive.function.server.ServerRequest;
 import org.springframework.web.reactive.function.server.ServerResponse;
 import reactor.core.publisher.Mono;
+import reactor.util.Logger;
+import reactor.util.Loggers;
 
 import static org.springframework.web.reactive.function.server.RequestPredicates.GET;
 import static org.springframework.web.reactive.function.server.RouterFunctions.route;
+import static org.springframework.web.reactive.function.server.ServerResponse.notFound;
 
-//@Configuration
+@Configuration
 public class RouteConfig {
 
+    //private static final Logger logger = LoggerFactory.getLogger(RouteConfig.class);
+    private static final Logger logger = Loggers.getLogger(RouteConfig.class);
     private final CoffeeService service;
 
     public RouteConfig(CoffeeService service) {
@@ -34,11 +41,10 @@ public class RouteConfig {
 
     private Mono<ServerResponse> byId(ServerRequest req) {
         return ServerResponse.ok()
-                .contentType(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON_UTF8)
                 .body(service.getCoffeeById(req.pathVariable("id")), Coffee.class)
-                .switchIfEmpty(ServerResponse.notFound().build());
-        //.defaultIfEmpty(notFound().build().block());
-        //.switchIfEmpty(notFound().build()); // Esto no funciona?
+                .log(logger)
+                .switchIfEmpty(notFound().build());
     }
 
     private Mono<ServerResponse> orders(ServerRequest req) {

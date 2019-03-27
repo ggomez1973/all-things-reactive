@@ -7,6 +7,7 @@ import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.reactive.WebFluxTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.reactive.server.WebTestClient;
@@ -15,7 +16,7 @@ import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
 
 @RunWith(SpringRunner.class)
-@WebFluxTest({CoffeeService.class, RouteConfig.class})
+@WebFluxTest({CoffeeService.class, RouteConfig.class}) //CoffeeController.class
 public class ExternalApiTest {
 
     @Autowired
@@ -35,6 +36,8 @@ public class ExternalApiTest {
         Mockito.when(repo.findAll()).thenReturn(Flux.just(coffee1, coffee2));
         Mockito.when(repo.findById(coffee1.getId())).thenReturn(Mono.just(coffee1));
         Mockito.when(repo.findById(coffee2.getId())).thenReturn(Mono.just(coffee2));
+
+        Mockito.when(repo.findById("wrong_id")).thenReturn(Mono.error(new NoSuchCoffeeException(HttpStatus.BAD_REQUEST, "No such coffee")));
     }
 
     @Test
@@ -62,6 +65,17 @@ public class ExternalApiTest {
                 .getResponseBody())
                 .expectNext(coffee2)
                 .verifyComplete();
+    }
+
+    @Test
+    public void ByWrongId(){
+        StepVerifier.create(client.get()
+                .uri("/coffees/{id}", "wrong_id")
+                .exchange()
+                .expectStatus().isBadRequest()
+                .returnResult(Coffee.class)
+                .getResponseBody())
+                .expectErrorMessage("No such coffee");
     }
 
     @Test

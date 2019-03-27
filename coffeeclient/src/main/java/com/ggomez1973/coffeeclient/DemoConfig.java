@@ -18,11 +18,14 @@ public class DemoConfig {
         return args -> client.get()
                 .retrieve()
                 .bodyToFlux(Coffee.class)
-                .filter(coffee -> coffee.getName().equalsIgnoreCase("Italiano tostado"))
+                .filter(coffee -> coffee.getName().equalsIgnoreCase("Italiano tostade"))
+                .subscribe(System.out::println);
+
+                /*
                 .flatMap(coffee -> client.get()
                         .uri("/{id}/orders", coffee.getId())
                         .retrieve()
                         .bodyToFlux(CoffeeOrder.class))
-                .subscribe(System.out::println);
+                .subscribe(System.out::println);*/
     }
 }
