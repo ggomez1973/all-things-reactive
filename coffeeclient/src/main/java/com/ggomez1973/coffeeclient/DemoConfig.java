@@ -10,15 +10,17 @@ public class DemoConfig {
     @Bean
     WebClient client() {
         // Points to Java-based coffee service configured to run on 8080
-        return WebClient.create("http://localhost:8080/coffees");
+        return WebClient.create("http://localhost:8080/coffees/888");
     }
 
     @Bean
     CommandLineRunner demo(WebClient client) {
         return args -> client.get()
                 .retrieve()
-                .bodyToFlux(Coffee.class)
-                .filter(coffee -> coffee.getName().equalsIgnoreCase("Italiano tostade"))
+                .bodyToMono(Coffee.class)
+
+//                .bodyToFlux(Coffee.class)
+//                .filter(coffee -> coffee.getName().equalsIgnoreCase("Italiano tostade"))
                 .subscribe(System.out::println);
 
                 /*
